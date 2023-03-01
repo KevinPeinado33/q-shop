@@ -27,7 +27,7 @@ import {
     VpnKeyOutlined 
 } from '@mui/icons-material'
 
-import type { RootState } from '@/redux/ui'
+import type { RootState } from '@/redux'
 import { toggleSideMenu } from '@/redux/slices/uiSlice'
 
 export const SideMenu = () => {
