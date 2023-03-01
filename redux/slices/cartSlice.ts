@@ -3,19 +3,19 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { ICartProduct } from '@/interfaces'
 
 export interface CartState {
-    cart: ICartProduct[]
+    cart         : ICartProduct[]
     numberOfItems: number
-    subTotal:      number
-    tax:           number
-    total:         number
+    subTotal     : number
+    tax          : number
+    total        : number
 }
 
 const initialState: CartState = {
-    cart: [ ],
+    cart         : [ ],
     numberOfItems: 0,
-    subTotal:      0,
-    tax:           0,
-    total:         0
+    subTotal     : 0,
+    tax          : 0,
+    total        : 0
 }
 
 export const cartSlice = createSlice({
