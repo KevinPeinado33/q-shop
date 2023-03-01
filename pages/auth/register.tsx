@@ -1,12 +1,16 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import NextLink from 'next/link'
+import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material'
 import { ErrorOutline } from '@mui/icons-material'
 
 import { AuthLayout  } from '@/components/layouts'
 import { validations } from '@/utils'
-import { tesloApi } from '@/api'
+import { AppDispatch, RootState } from '@/redux'
+import { loginRegister } from '@/services'
+import { error } from '@/redux/slices/authSlice'
 
 type FormData = {
     name    : string
@@ -16,7 +20,12 @@ type FormData = {
 
 const RegisterPage = () => {
 
-    const [ showError, setShowError ] = useState(false)
+    const router                = useRouter()
+    const dispatch: AppDispatch = useDispatch()
+
+    const { 
+        isError 
+    } = useSelector( (state: RootState) => state.auth )
 
     const { 
         register, 
@@ -25,19 +34,16 @@ const RegisterPage = () => {
     } = useForm< FormData >()
 
     const onRegisterForm = async ( { email, password, name }: FormData ) => {
-        setShowError( false )
-        
-        try {
-            const { data } = await tesloApi.post('/user/register', { email, password, name })
-            const { token, user } = data
 
-            console.log({ token, user })
+        dispatch( loginRegister( email, password, name ) )
 
-        } catch ( error ) {
-            console.log('Error en las credenciales')
-            setShowError( true )
-            setTimeout(() => setShowError( false ), 9000)
+        if ( !isError ) {
+            setTimeout(() => dispatch(error( false )), 9000)
+            return
         }
+
+        router.replace('/')
+
     }
 
     return (
@@ -52,11 +58,11 @@ const RegisterPage = () => {
                             <Grid item xs={ 12 } >
                                 <Typography variant='h1' component='h1'>Crear Usuario</Typography>
                                 <Chip 
-                                    label='No reconocemos ese usuario / constraseña'
+                                    label='Hay un error en el registro'
                                     color='error'
                                     icon={ <ErrorOutline /> }
                                     className='fadeIn'
-                                    sx={{ display: showError ? 'flex' : 'none' }}
+                                    sx={{ display: isError ? 'flex' : 'none' }}
                                 />
                             </Grid>
                             <Grid item xs={ 12 } >

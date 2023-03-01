@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import type { RootState } from '@/redux/store'
 import { ItemCounter } from '../UI'
 import { ICartProduct } from '@/interfaces'
-import { updateCartQuantity, removeCardProduct } from '@/redux/slices'
+import { updateCartQuantity, removeCardProduct } from '@/redux/slices/cartSlice'
 
 interface Props {
     editable?: boolean

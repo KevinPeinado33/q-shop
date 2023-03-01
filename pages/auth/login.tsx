@@ -1,12 +1,16 @@
-import { useState } from 'react'
 import NextLink from 'next/link'
-import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material'
+import { ErrorOutline } from '@mui/icons-material'
 
+import { loginUser } from '@/services'
 import { AuthLayout } from '@/components/layouts'
 import { validations } from '@/utils'
-import { tesloApi } from '@/api'
-import { ErrorOutline } from '@mui/icons-material'
+import { RootState } from '@/redux'
+import { AppDispatch } from '@/redux/store'
+import { error } from '@/redux/slices/authSlice'
 
 type FormData = {
     email   : string
@@ -15,7 +19,12 @@ type FormData = {
 
 const LoginPage = () => {
 
-    const [ showError, setShowError ] = useState(false)
+    const router                = useRouter()
+    const dispatch: AppDispatch = useDispatch()
+
+    const { 
+        isError 
+    } = useSelector( (state: RootState) => state.auth )
 
     const { 
         register, 
@@ -25,19 +34,21 @@ const LoginPage = () => {
 
     const onLoginUser = async ( { email, password }: FormData ) => {
 
-        setShowError( false )
-        
-        try {
-            const { data } = await tesloApi.post('/user/login', { email, password })
-            const { token, user } = data
+        dispatch( loginUser( email, password ) )
 
-            console.log({ token, user })
+        console.log({ isError })
 
-        } catch ( error ) {
-            console.log('Error en las credenciales')
-            setShowError( true )
-            setTimeout(() => setShowError( false ), 9000)
+        if ( !isError ) {
+            setTimeout(() => {
+                dispatch(error( false ))
+            }, 9000)
+            return
         }
+
+        console.log('entroo aquiii')
+
+        router.replace('/')
+        
     }
 
     return (
@@ -55,7 +66,7 @@ const LoginPage = () => {
                                     color='error'
                                     icon={ <ErrorOutline /> }
                                     className='fadeIn'
-                                    sx={{ display: showError ? 'flex' : 'none' }}
+                                    sx={{ display: isError ? 'flex' : 'none' }}
                                 />
                             </Grid>
                             <Grid item xs={ 12 } >

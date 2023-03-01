@@ -4,12 +4,14 @@ import { IUser } from '@/interfaces'
 
 export interface AuthState {
     isLoggedIn: boolean,
-    user?     : IUser
+    user?     : IUser,
+    isError?  : boolean
 }
 
 const initialState: AuthState = {
     isLoggedIn: false,
-    user      : undefined
+    user      : undefined,
+    isError   : false
 }
 
 export const authSlice = createSlice({
@@ -17,9 +19,14 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
 
+        error: ( state, { payload }: PayloadAction< boolean > ) => {
+            state.isError = payload
+        },
+
         login: ( state, { payload }: PayloadAction< IUser > ) => { 
 
             state.isLoggedIn = true
+            state.isError    = false
             state.user       = payload
 
         },
@@ -28,15 +35,17 @@ export const authSlice = createSlice({
 
             state.isLoggedIn = false
             state.user       = undefined
+            state.isError    = false
             
         }
 
     }
 })
 
-export const { 
+export const {
+    error,
     login,
-    logout
+    logout,    
 } = authSlice.actions
 
 export default authSlice.reducer

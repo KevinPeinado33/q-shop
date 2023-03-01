@@ -11,6 +11,8 @@ import Cookie from 'js-cookie'
 
 import { RootState } from './store'
 import { getLoadCartFromCookie, updatedOrderSummary } from './slices/cartSlice'
+import { tesloApi } from '@/api'
+import { error, login } from './slices/authSlice'
 
 const COOKIE_CART = 'cart'
 
@@ -60,6 +62,26 @@ const ProviderApp: FC< Props > = ({ children }) => {
         dispatch(updatedOrderSummary( orderSummary ))
 
     }, [ cart ])
+
+    useEffect(() => {
+        checkToken()
+    }, [ ])
+
+    const checkToken = async () => {
+        try {
+        
+            const { data } = await tesloApi.get('/user/validate-token')
+    
+            const { token, user } = data
+    
+            Cookie.set('token', token)
+    
+            dispatch( login( user ) )
+    
+        } catch ( e ) {
+            Cookie.remove('token')
+        }
+    }
 
     return (
         <>
