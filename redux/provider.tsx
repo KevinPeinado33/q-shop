@@ -10,9 +10,9 @@ import {
 import Cookie from 'js-cookie'
 
 import { RootState } from './store'
-import { getLoadCartFromCookie, updatedOrderSummary } from './slices/cartSlice'
+import { getLoadCartFromCookie, updatedOrderSummary, getLoadAddressFromCookie } from './slices/cartSlice'
 import { tesloApi } from '@/api'
-import { error, login } from './slices/authSlice'
+import { login } from './slices/authSlice'
 
 const COOKIE_CART = 'cart'
 
@@ -39,6 +39,24 @@ const ProviderApp: FC< Props > = ({ children }) => {
         
     }, [ ])
 
+    useEffect(() => {
+
+        if ( Cookie.get('firstName') ) {
+            const shippingAddress = {
+                firstName: Cookie.get('firstName') || '',
+                lastName : Cookie.get('lastName')  || '',
+                address  : Cookie.get('address')   || '',
+                address2 : Cookie.get('address2')  || '',
+                zip      : Cookie.get('zip')       || '',
+                city     : Cookie.get('city')      || '',
+                country  : Cookie.get('country')   || '',
+                phone    : Cookie.get('phone')     || ''
+            }
+            dispatch( getLoadAddressFromCookie( shippingAddress ) )
+        }
+
+    }, [ ])
+ 
     useEffect(() => {
 
         if ( cart.length > 0 )  

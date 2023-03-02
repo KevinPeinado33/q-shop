@@ -1,23 +1,25 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-import { ICartProduct } from '@/interfaces'
+import { ICartProduct, IShippingAddress } from '@/interfaces'
 
 export interface CartState {
-    isLoaded     : boolean
-    cart         : ICartProduct[]
-    numberOfItems: number
-    subTotal     : number
-    tax          : number
-    total        : number
+    isLoaded        : boolean
+    cart            : ICartProduct[]
+    numberOfItems   : number
+    subTotal        : number
+    tax             : number
+    total           : number
+    shippingAddress?: IShippingAddress
 }
 
 const initialState: CartState = {
-    isLoaded     : false,
-    cart         : [ ],
-    numberOfItems: 0,
-    subTotal     : 0,
-    tax          : 0,
-    total        : 0
+    isLoaded       : false,
+    cart           : [ ],
+    numberOfItems  : 0,
+    subTotal       : 0,
+    tax            : 0,
+    total          : 0,
+    shippingAddress: undefined
 }
 
 export const cartSlice = createSlice({
@@ -30,6 +32,10 @@ export const cartSlice = createSlice({
             state.isLoaded = true
             state.cart = payload
         
+        },
+
+        getLoadAddressFromCookie: ( state, { payload }: PayloadAction< IShippingAddress > ) => {
+            state.shippingAddress = payload
         },
 
         updatedProduct: ( state, { payload }: PayloadAction< ICartProduct > ) => {
@@ -99,6 +105,7 @@ export const cartSlice = createSlice({
 })
 
 export const { 
+    getLoadAddressFromCookie,
     getLoadCartFromCookie, 
     updatedOrderSummary,
     updateCartQuantity,

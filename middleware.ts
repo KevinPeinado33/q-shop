@@ -1,35 +1,27 @@
 import { NextResponse, type NextRequest } from 'next/server'
-
-import { jwt } from './utils'
+import { getToken } from 'next-auth/jwt'
 
 export async function middleware ( req: NextRequest ) {
 
-    const token = req.cookies.get('token')?.value || ''
-    
-    console.log({ token })
+    const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    console.log({ session })
 
-    try {
-
-        await jwt.isValidToken( token )
-
-        console.log('Entrooo aquiii')
-        
-        return NextResponse.next()
-
-    } catch ( error ) {
+    if ( !session ) {
 
         const requestedPage = req.nextUrl.pathname
         const url           = req.nextUrl.clone()
     
         url.pathname = `/auth/login`
         url.search   = `p=${ requestedPage }`
-
+        
         return NextResponse.redirect( url )
-
+        
     }
-
+    
+    return NextResponse.next()
+    
 }
 
 export const config =  {
-    matcher: ['/checkout/address', '/checkout/summary']
+    matcher: ['/checkout/:path*',]
 }

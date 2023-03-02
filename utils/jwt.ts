@@ -43,3 +43,19 @@ export const isValidToken = (token: string): Promise< string > => {
     })
 
 }
+
+export const isValidJWT = (token: string) => {
+
+    if ( token.length <= 10 ) return false
+
+    jwt.verify( token, process.env.JWT_SECRET_SEED || '', ( err, payload ) => {
+        
+        if ( err ) return false
+
+        return true
+    
+    })
+
+    return true
+
+}
