@@ -26,7 +26,6 @@ export const authSlice = createSlice({
         login: ( state, { payload }: PayloadAction< IUser > ) => { 
 
             state.isLoggedIn = true
-            state.isError    = false
             state.user       = payload
 
         },
@@ -35,7 +34,6 @@ export const authSlice = createSlice({
 
             state.isLoggedIn = false
             state.user       = undefined
-            state.isError    = false
             
         }
 

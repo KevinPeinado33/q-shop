@@ -32,22 +32,19 @@ const LoginPage = () => {
         formState: { errors } 
     } = useForm< FormData >()
 
-    const onLoginUser = async ( { email, password }: FormData ) => {
+    const onLoginUser = ( { email, password }: FormData ) => {
 
         dispatch( loginUser( email, password ) )
 
-        console.log({ isError })
-
-        if ( !isError ) {
+        if ( isError ) {
             setTimeout(() => {
                 dispatch(error( false ))
             }, 9000)
             return
         }
 
-        console.log('entroo aquiii')
-
-        router.replace('/')
+        const destination = router.query.p?.toString() || '/'
+        router.replace(destination)
         
     }
 
@@ -96,7 +93,7 @@ const LoginPage = () => {
                                     error={ !!errors.password }
                                     helperText={ errors.password?.message }
                                     label='Password' 
-                                    type='password' 
+                                    type='text' 
                                     variant='outlined' 
                                     fullWidth 
                                 />
@@ -114,7 +111,11 @@ const LoginPage = () => {
                             </Grid>
 
                             <Grid item xs={ 12 } display='flex' justifyContent='end' >
-                                <NextLink href='/auth/register' passHref legacyBehavior >
+                                <NextLink 
+                                    href={ router.query.p ? `/auth/register?p=${router.query.p}` : '/auth/register' } 
+                                    passHref 
+                                    legacyBehavior 
+                                >
                                     <Link underline='always'>
                                         No tienes cuenta?
                                     </Link>

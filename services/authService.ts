@@ -15,12 +15,9 @@ export const loginUser = (
 
         const { token, user } = data
 
-        console.log({ token, user })
-
         Cookie.set('token', token)
 
         dispatch( login( user ) )
-        dispatch( error( false ) )
 
     } catch ( e ) {
         dispatch( error( true ) )
@@ -49,4 +46,9 @@ export const loginRegister = (
         dispatch( error( true ) )
     }
 
+}
+
+export const logoutUser = () => {
+    Cookie.remove('token')
+    Cookie.remove('cart')
 }

@@ -1,12 +1,29 @@
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useSelector } from 'react-redux'
 import { Box, Button, CardContent, Divider, Grid, Typography } from '@mui/material'
+
 import { CardList, OrderSummary } from '@/components/cart'
 import { ShopLayout } from '@/components/layouts'
-import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store'
 
 const CartPage = () => {
 
-    const { numberOfItems } = useSelector((state: RootState) => state.cart)
+    const router = useRouter()
+
+    const { 
+        numberOfItems,
+        isLoaded,
+        cart
+    } = useSelector((state: RootState) => state.cart)
+
+    useEffect(() => {
+        if ( isLoaded && cart.length === 0 ) {
+            router.replace('/cart/empty')
+        }
+    }, [ isLoaded, cart, router ])
+    
+    if ( !isLoaded || cart.length === 0 ) return (<></>)
 
     return (
         <ShopLayout
@@ -27,7 +44,12 @@ const CartPage = () => {
                             <OrderSummary />
 
                             <Box sx={{ mt: 3 }} >
-                                <Button color='secondary' className='circular-btn' fullWidth>
+                                <Button 
+                                    href='/checkout/address'
+                                    color='secondary' 
+                                    className='circular-btn' 
+                                    fullWidth
+                                >
                                     Checkout
                                 </Button>
                             </Box>

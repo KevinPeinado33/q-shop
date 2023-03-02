@@ -3,6 +3,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { ICartProduct } from '@/interfaces'
 
 export interface CartState {
+    isLoaded     : boolean
     cart         : ICartProduct[]
     numberOfItems: number
     subTotal     : number
@@ -11,6 +12,7 @@ export interface CartState {
 }
 
 const initialState: CartState = {
+    isLoaded     : false,
     cart         : [ ],
     numberOfItems: 0,
     subTotal     : 0,
@@ -24,7 +26,10 @@ export const cartSlice = createSlice({
     reducers: {
 
         getLoadCartFromCookie: ( state, { payload }: PayloadAction< ICartProduct[ ] > ) => {
+            
+            state.isLoaded = true
             state.cart = payload
+        
         },
 
         updatedProduct: ( state, { payload }: PayloadAction< ICartProduct > ) => {
