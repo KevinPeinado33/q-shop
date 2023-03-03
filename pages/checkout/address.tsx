@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
+import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import { 
     Box, 
     Button,
@@ -13,7 +15,8 @@ import {
 
 import { ShopLayout } from '@/components/layouts'
 import { countries } from '@/utils/countries'
-import { useForm } from 'react-hook-form'
+import { updatedAddressCart } from '@/services'
+import { AppDispatch } from '@/redux/store'
 
 type FormData = {
     firstName: string
@@ -41,23 +44,15 @@ const getAddressFromCookies = (): FormData => {
 
 const AddressPage = () => {
 
-    const router = useRouter()
+    const router                = useRouter()
+    const dispatch: AppDispatch = useDispatch()
 
     const { register, handleSubmit, formState: { errors } } = useForm< FormData >({
         defaultValues: getAddressFromCookies()
     })
 
     const onSubmitAddress = ( data: FormData ) => {
-        console.log({ data })
-        Cookies.set('firstName', data.firstName)
-        Cookies.set('lastName', data.lastName)
-        Cookies.set('address', data.address)
-        Cookies.set('address2', data.address2 || '')
-        Cookies.set('zip', data.zip)
-        Cookies.set('city', data.city)
-        Cookies.set('country', data.country)
-        Cookies.set('phone', data.phone)
-
+        dispatch( updatedAddressCart( data ) )
         router.push('/checkout/summary')
     }
 
@@ -162,7 +157,6 @@ const AddressPage = () => {
                                     })
                                 }
                                 error={ !!errors.country }
-                                // helperText={ errors.country?.message }
                                 variant='outlined'
                                 label='Pais'
                                 defaultValue={ countries[0].code }

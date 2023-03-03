@@ -51,7 +51,6 @@ export const Navbar = () => {
                 <Box flex={ 1 } />
 
                 <Box 
-                    className='fadeIn'
                     sx={{ display: isSearchVisible ? 'none' : { xs: 'none', sm:'block' } }} >
                     <NextLink href='/category/men' passHref legacyBehavior >
                         <Link>

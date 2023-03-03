@@ -34,7 +34,7 @@ export const cartSlice = createSlice({
         
         },
 
-        getLoadAddressFromCookie: ( state, { payload }: PayloadAction< IShippingAddress > ) => {
+        updatedAddress: ( state, { payload }: PayloadAction< IShippingAddress > ) => {
             state.shippingAddress = payload
         },
 
@@ -105,7 +105,7 @@ export const cartSlice = createSlice({
 })
 
 export const { 
-    getLoadAddressFromCookie,
+    updatedAddress,
     getLoadCartFromCookie, 
     updatedOrderSummary,
     updateCartQuantity,

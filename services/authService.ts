@@ -4,6 +4,7 @@ import Cookie from 'js-cookie'
 import { AppDispatch } from '@/redux'
 import { error, login } from '@/redux/slices/authSlice'
 
+
 export const loginUser = ( 
     email   : string, 
     password: string 
@@ -51,4 +52,12 @@ export const loginRegister = (
 export const logoutUser = () => {
     Cookie.remove('token')
     Cookie.remove('cart')
+    Cookie.remove('firstName')
+    Cookie.remove('lastName')
+    Cookie.remove('address')
+    Cookie.remove('address2')
+    Cookie.remove('zip')
+    Cookie.remove('city')
+    Cookie.remove('country')
+    Cookie.remove('phone')
 }

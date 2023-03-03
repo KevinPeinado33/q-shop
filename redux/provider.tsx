@@ -10,7 +10,11 @@ import {
 import Cookie from 'js-cookie'
 
 import { RootState } from './store'
-import { getLoadCartFromCookie, updatedOrderSummary, getLoadAddressFromCookie } from './slices/cartSlice'
+import { 
+    getLoadCartFromCookie, 
+    updatedOrderSummary, 
+    updatedAddress 
+} from './slices/cartSlice'
 import { tesloApi } from '@/api'
 import { login } from './slices/authSlice'
 
@@ -52,7 +56,7 @@ const ProviderApp: FC< Props > = ({ children }) => {
                 country  : Cookie.get('country')   || '',
                 phone    : Cookie.get('phone')     || ''
             }
-            dispatch( getLoadAddressFromCookie( shippingAddress ) )
+            dispatch( updatedAddress( shippingAddress ) )
         }
 
     }, [ ])
