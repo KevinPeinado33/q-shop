@@ -1,6 +1,6 @@
-import { Model, Schema, model } from 'mongoose'
-import mongoose from 'mongoose';
-import { IUser } from '@/interfaces';
+import mongoose, { Model, Schema, model } from 'mongoose'
+
+import { IUser } from '@/interfaces'
 
 const userSchema = new Schema({
     name:     { type: String, required: true },
